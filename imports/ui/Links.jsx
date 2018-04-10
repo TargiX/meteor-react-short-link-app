@@ -1,18 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Accounts } from 'meteor/accounts-base';
 
-const Links = props => (
-  <div>
-    <h1>Short Lnk</h1>
+export default class Links extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onLogout = this.onLogout.bind(this);
+  }
 
-    <button onClick={props.history.goBack}>Log out</button>
-  </div>
-);
+  onLogout() {
+    Accounts.logout();
+  }
 
-Links.propTypes = {
-  history: PropTypes.shape(null),
-};
-Links.defaultProps = {
-  history: {},
-};
-export default Links;
+  render() {
+    return (
+      <div>
+        <h1>Short Lnk</h1>
+
+        <button onClick={this.onLogout}>Log out</button>
+      </div>
+    );
+  }
+}
