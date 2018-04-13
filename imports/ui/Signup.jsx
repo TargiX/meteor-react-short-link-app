@@ -14,9 +14,22 @@ export default class Signup extends React.Component {
   onSubmit(e) {
     e.preventDefault();
 
-    Accounts.createUser({ email: this.email.value, password: this.password.value }, (err) => {
-      console.log('Signup callback', err);
-    });
+    if (this.password.value.trim().length < 9) {
+      return this.setState({
+        error: 'Password must be more than 8 characters long',
+      });
+    }
+
+    Accounts.createUser(
+      { email: this.email.value.trim(), password: this.password.value.trim() },
+      (err) => {
+        if (err) {
+          this.setState({ error: err.reason });
+        } else {
+          this.setState({ error: '' });
+        }
+      },
+    );
   }
 
   render() {
@@ -24,7 +37,7 @@ export default class Signup extends React.Component {
       <div>
         <h1>Join Short Lnk</h1>
         {this.state.error ? <p>{this.state.error}</p> : undefined}
-        <form onSubmit={this.onSubmit}>
+        <form onSubmit={this.onSubmit} noValidate>
           <input
             type="email"
             ref={(email) => {
